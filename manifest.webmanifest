@@ -1,0 +1,14 @@
+{
+  "name": "CUE Games",
+  "short_name": "CUE Games",
+  "description": "Short animated numerology and astrology games, a daily 2× Cue Coins bonus, unlockable cosmetics and the Cueseum.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08081E",
+  "theme_color": "#08081E",
+  "icons": [
+    { "src": "arcade-menu/cue-games-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "arcade-menu/cue-games-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

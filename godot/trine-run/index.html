@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>CUE IQ · Trine Run</title>
+  
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03060f;color:#fff2c0;font-family:system-ui,sans-serif}
+    #canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+    #loading{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:#050c1c;gap:14px;padding:28px}
+    #loading strong{letter-spacing:3px;font-size:24px;color:#ffd77b} progress{width:230px;accent-color:#ffd77b}
+  </style>
+</head>
+<body>
+  <canvas id="canvas" tabindex="0" aria-label="Trine Run. Choose one of eight Bamboo Woodland levels lasting 30 to 60 seconds, eight theme samples, Bamboo Ridge or the tutorial. Choose a runner, then begin. Tap or Space to jump; tap again in midair to double jump. Start solo and recruit two trine teammates. Duplicate teammates give bonus points. Losing a character passes control to the next teammate. Arrow keys choose menu actions; Enter selects. Escape or P pauses, M toggles sound.">Your browser needs WebGL 2 to play Trine Run.</canvas>
+  <div id="loading" role="status"><strong>CUE IQ</strong><span id="loading-label">Opening Trine Run…</span><progress id="progress"></progress></div>
+  <script src="audio.js"></script>
+  <script src="index.js"></script>
+  <script>
+  (() => {
+    const channel='cue-iq/trine-run',version=1;
+    const parentOrigin=document.referrer?new URL(document.referrer).origin:location.origin;
+    const audio=new TrineAudio(),motion=matchMedia('(prefers-reduced-motion: reduce)');
+    let callback=null,pending=[],sound=true,paused=false,localPaused=false,motionChoice=null;
+    try{sound=localStorage.getItem('trine-run-sound')!=='off';}catch{}
+    try{const choice=localStorage.getItem('trine-run-reduced-motion');if(choice==='on'||choice==='off')motionChoice=choice==='on';}catch{}
+    audio.setSound(sound);
+    function envelope(type,values={}){return {...values,channel,version,type};}
+    function emit(raw){let event;try{event=JSON.parse(raw);}catch{return;}
+      if(window.ReactNativeWebView)window.ReactNativeWebView.postMessage(JSON.stringify(event));
+      else if(window.parent!==window)window.parent.postMessage(event,parentOrigin);
+      else window.dispatchEvent(new CustomEvent('cue-trine-run-event',{detail:event}));
+    }
+    function receive(raw){let message;try{message=typeof raw==='string'?JSON.parse(raw):raw;}catch{return;}
+      if(message?.channel!==channel||message.version!==version)return;
+      if(message.type==='settings'){
+        if(typeof message.sound==='boolean')setSound(message.sound);
+        if(typeof message.reducedMotion==='boolean')setReducedMotion(message.reducedMotion);
+        if(typeof message.paused==='boolean')paused=message.paused;
+        syncAudio();
+      }
+      if(callback)callback(JSON.stringify(message));else pending.push(message);
+    }
+    function setSound(value){sound=Boolean(value);audio.setSound(sound);
+      try{localStorage.setItem('trine-run-sound',sound?'on':'off');}catch{}}
+    function setReducedMotion(value){motionChoice=Boolean(value);
+      try{localStorage.setItem('trine-run-reduced-motion',motionChoice?'on':'off');}catch{}}
+    function syncAudio(){audio.setPaused(paused||localPaused||document.hidden);}
+    function unlock(){audio.unlock();}
+    window.TrineRun={register(fn){callback=fn;
+        callback(JSON.stringify(envelope('settings',{sound,reducedMotion:motionChoice??motion.matches,paused:paused||document.hidden})));
+        pending.splice(0).forEach(m=>callback(JSON.stringify(m)));},receive,emit,
+      music:value=>audio.music(value),tone:kind=>audio.tone(kind),setSound,setReducedMotion,
+      pause(value){localPaused=Boolean(value);syncAudio();},
+      ready(){document.getElementById('loading').hidden=true;document.getElementById('loading').style.display='none';}};
+    motion.addEventListener('change',event=>{if(motionChoice===null){
+      const message=envelope('settings',{reducedMotion:event.matches});
+      if(callback)callback(JSON.stringify(message));else pending.push(message);
+    }});
+    addEventListener('message',event=>{if(event.source===window.parent&&event.origin===parentOrigin)receive(event.data);});
+    addEventListener('pointerdown',unlock,{passive:true,capture:true});addEventListener('keydown',unlock,{capture:true});
+    document.addEventListener('visibilitychange',()=>{
+      syncAudio();
+      const message=envelope('settings',{paused:paused||document.hidden});
+      if(callback)callback(JSON.stringify(message));else pending.push(message);
+    });
+    const engine=new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"../runtime/fce12c0d8f9e5df6/godot","experimentalVK":false,"fileSizes":{"index.pck":37373420,"../runtime/fce12c0d8f9e5df6/godot.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"});
+    engine.startGame({onProgress:(loaded,total)=>{const bar=document.getElementById('progress');if(total>0){bar.max=total;bar.value=loaded;}}})
+      .catch(error=>{const message=`Trine Run could not start. ${error.message||error}`;document.getElementById('loading-label').textContent=message;document.getElementById('progress').hidden=true;emit(JSON.stringify(envelope('boot_error',{message})));});
+  })();
+  </script>
+</body>
+</html>
+
