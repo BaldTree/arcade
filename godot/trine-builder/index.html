@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>CUE IQ · Trine Builder</title>
+  
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03060f;color:#ffdc91;font-family:system-ui,sans-serif}
+    #canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+    #loading{position:absolute;inset:0;display:grid;place-content:center;text-align:center;background:#050c1c;gap:14px;padding:28px}
+    #loading strong{letter-spacing:4px;font-size:24px} progress{width:230px;accent-color:#e5ae4e}
+    #accessible{position:absolute;left:0;top:0;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    #accessible:focus-within{width:auto;height:auto;max-width:90%;clip-path:none;background:#071525;padding:16px;z-index:5;border:2px solid #d6ab54}
+    #accessible button{min-height:44px;margin:3px;background:#0b2949;color:#fff1c7;border:1px solid #c79747;padding:8px}
+  </style>
+</head>
+<body>
+  <canvas id="canvas" tabindex="0" aria-label="Animated Trine Builder observatory. Tab for accessible answer controls.">Your browser needs WebGL 2 to play this scene.</canvas>
+  <div id="loading" role="status"><strong>CUE IQ</strong><span id="loading-label">Opening the observatory…</span><progress id="progress"></progress></div>
+  <section id="accessible" aria-label="Trine Builder controls"><p id="question">Waiting for the round…</p><p id="announcement" role="status" aria-live="polite"></p><div id="answers"></div>
+    <button id="continue" hidden>Continue</button><button id="replay">Replay</button><button id="pause">Pause</button><button id="sound">Sound on</button><button id="exit">Exit game</button>
+  </section>
+  <script src="index.js"></script>
+  <script>
+  (() => {
+    const channel='cue-iq/trine-godot', version=1;
+    const embedded=window.parent!==window || !!window.ReactNativeWebView;
+    const parentOrigin=document.referrer ? new URL(document.referrer).origin : location.origin;
+    let callback=null, pending=[], current=null, paused=false, hostPaused=false, hidden=document.hidden, sound=true, context=null, answerLocked=false, correctResult=false;
+    let audioUnlocked=false, musicSource=null, musicPending=false, musicFile=null;
+    function prefetchMusic() {
+      if(!musicFile) musicFile=fetch('observatory-lofi.wav').then(response=>{if(!response.ok)throw new Error('Music unavailable');return response.arrayBuffer();}).catch(()=>null);
+      return musicFile;
+    }
+    const motion=matchMedia('(prefers-reduced-motion: reduce)');
+    function envelope(type, values={}) {return {...values,channel,version,type};}
+    function emit(event) {
+      if(window.ReactNativeWebView) window.ReactNativeWebView.postMessage(JSON.stringify(event));
+      else if(window.parent!==window) window.parent.postMessage(event,parentOrigin);
+      else window.dispatchEvent(new CustomEvent('cue-trine-event',{detail:event}));
+    }
+    function choose(animal) {emit(envelope('choose',{roundId:current?.roundId,animal}));}
+    function sendSettings() {receive(envelope('settings',{paused:paused||hidden,reducedMotion:motion.matches,sound}));}
+    function applyToAccessibility(message) {
+      const answers=document.getElementById('answers'), next=document.getElementById('continue');
+      if(message.type==='round') {
+        current=message; answerLocked=false; correctResult=false; next.hidden=true; next.textContent='Next trine'; answers.replaceChildren();
+        document.getElementById('announcement').textContent='';
+        document.getElementById('question').textContent=`Score ${message.score}. Choose the two animals that complete ${message.anchor}'s trine before time runs out.`;
+        message.options.forEach(animal=>{const button=document.createElement('button');button.textContent=animal;button.onclick=()=>choose(animal);button.dataset.animal=animal;button.setAttribute('aria-pressed','false');answers.append(button);});
+      }
+      if(message.type==='selection'||message.type==='result') {answerLocked=message.type==='result';if(message.type==='result')correctResult=message.correct;answers.querySelectorAll('button').forEach(button=>{button.setAttribute('aria-pressed',String(message.selected.includes(button.dataset.animal)));button.disabled=answerLocked||paused;});}
+      if(message.type==='result') document.getElementById('announcement').textContent=`${message.correct?'Correct!':'Not this trine.'} ${message.explanation}`;
+      if(message.type==='complete') {next.hidden=true;answers.replaceChildren();document.getElementById('announcement').textContent=`Time's up. ${message.score} trines completed.`;}
+      if(message.type==='settings') {
+        if(typeof message.sound==='boolean') sound=message.sound;
+        if(typeof message.paused==='boolean') paused=message.paused;
+        document.getElementById('sound').textContent=sound?'Sound on':'Sound off';
+        document.getElementById('pause').textContent=paused?'Resume':'Pause';
+        answers.querySelectorAll('button').forEach(button=>button.disabled=answerLocked||paused);next.disabled=paused;
+        syncAudio();
+      }
+    }
+    function receive(raw) {
+      let message;try{message=typeof raw==='string'?JSON.parse(raw):raw;}catch{return;}
+      if(!message||message.channel!==channel||message.version!==version) return;
+      if(message.type==='settings') {
+        if(typeof message.paused==='boolean')hostPaused=message.paused;
+        message={...message,paused:hostPaused||hidden};
+      }
+      applyToAccessibility(message);
+      if(callback) callback(JSON.stringify(message));else pending.push(message);
+    }
+    function syncAudio() {
+      if(!context)return;
+      if(!sound||paused||hidden)context.suspend().catch(()=>{});
+      else if(audioUnlocked)context.resume().catch(()=>{});
+    }
+    function startMusic() {
+      if(!context||!audioUnlocked||musicSource||musicPending)return;
+      musicPending=true;
+      prefetchMusic().then(bytes=>{
+        if(!bytes||!context||context.state==='closed')return;
+        musicFile=null;
+        return context.decodeAudioData(bytes).then(buffer=>{
+          if(!context||context.state==='closed')return;
+          const source=context.createBufferSource(),gain=context.createGain();
+          source.buffer=buffer;source.loop=true;gain.gain.value=0.05;
+          source.connect(gain);gain.connect(context.destination);source.start();
+          musicSource=source;syncAudio();
+        });
+      }).catch(()=>{}).finally(()=>{musicPending=false;});
+    }
+    function unlockAudio() {
+      audioUnlocked=true;
+      if(!context)try{context=new (window.AudioContext||window.webkitAudioContext)();}catch{}
+      syncAudio();startMusic();
+    }
+    function tone(kind) {
+      if(!sound||paused||hidden||!context||context.state!=='running')return;
+      const notes=kind==='complete'?[261.63,523.25,659.25,783.99,1046.5,1318.51]:kind==='charge'?[392]:kind==='link_one'?[523.25]:kind==='link_two'?[659.25]:kind==='correct'?[523.25,659.25,783.99,1046.5]:kind==='incorrect'?[220,174.6]:[784];
+      const flourish=kind==='complete',duration=flourish ? 0.75 : 0.23;
+      notes.forEach((hz,i)=>{const osc=context.createOscillator(),gain=context.createGain(),delay=flourish?(i<4?0:.19+(i-4)*.08):i*.1,at=context.currentTime+delay;osc.type=flourish?'sine':'triangle';osc.frequency.setValueAtTime(hz,at);gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(flourish ? 0.03 : 0.055,at+.018);gain.gain.exponentialRampToValueAtTime(.0001,at+duration);osc.connect(gain);gain.connect(context.destination);osc.start(at);osc.stop(at+duration+.025);});
+    }
+    window.CueTrine={
+      receive, tone,metrics(raw){try{window.CueTrineMetrics=JSON.parse(raw);}catch{}},
+      register(fn){callback=fn;pending.splice(0).forEach(message=>callback(JSON.stringify(message)));},
+      emit(raw){let event;try{event=JSON.parse(raw);}catch{return;}if(event.type==='next_ready'||(event.type==='feedback_complete'&&!correctResult))document.getElementById('continue').hidden=false;emit(event);},
+      ready(){window.CueTrine.isReady=true;document.getElementById('loading').hidden=true;document.getElementById('loading').style.display='none';prefetchMusic();}
+    };
+    addEventListener('message',event=>{if(event.source===window.parent&&event.origin===parentOrigin)receive(event.data);});
+    addEventListener('pointerdown',unlockAudio,{passive:true,capture:true});addEventListener('keydown',unlockAudio,{capture:true});
+    document.getElementById('continue').onclick=()=>emit(envelope('continue',{roundId:current?.roundId}));
+    document.getElementById('replay').onclick=()=>emit(envelope('replay',{roundId:current?.roundId}));
+    document.getElementById('exit').onclick=()=>emit(envelope('exit'));
+    document.getElementById('pause').onclick=()=>emit(envelope('toggle_pause'));
+    document.getElementById('sound').onclick=()=>emit(envelope('toggle_sound'));
+    document.addEventListener('visibilitychange',()=>{hidden=document.hidden;receive(envelope('settings'));});
+    motion.addEventListener('change',()=>{if(!embedded)sendSettings();});
+    const engine=new Engine({"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"../runtime/fce12c0d8f9e5df6/godot","experimentalVK":false,"fileSizes":{"index.pck":11353508,"../runtime/fce12c0d8f9e5df6/godot.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"});
+    window.CueTrineEngine=engine;
+    engine.startGame({onProgress:(loaded,total)=>{const bar=document.getElementById('progress');if(total>0){bar.max=total;bar.value=loaded;}},onExit:()=>{context?.close();}}).catch(error=>{
+      const text=`The observatory could not start. ${error.message||error}`;document.getElementById('loading-label').textContent=text;document.getElementById('progress').hidden=true;emit(envelope('boot_error',{message:text}));
+    });
+    // Standalone browser preview uses the same React host reducer compiled by the export script.
+    if(!embedded){const script=document.createElement('script');script.src='standalone.js';document.head.append(script);}
+  })();
+  </script>
+</body>
+</html>
+

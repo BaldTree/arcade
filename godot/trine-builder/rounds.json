@@ -1,0 +1,410 @@
+[
+  {
+    "id": "trine-builder-1-Horse-Dragon-Pig-Ox-Tiger-Cat-Dog",
+    "eyebrow": "Trine Builder",
+    "prompt": "Horse",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Dragon",
+        "label": "Dragon"
+      },
+      {
+        "id": "Pig",
+        "label": "Pig"
+      },
+      {
+        "id": "Ox",
+        "label": "Ox"
+      },
+      {
+        "id": "Tiger",
+        "label": "Tiger"
+      },
+      {
+        "id": "Cat",
+        "label": "Cat"
+      },
+      {
+        "id": "Dog",
+        "label": "Dog"
+      }
+    ],
+    "correctOptionId": "Dog|Tiger",
+    "explanation": "Tiger / Horse / Dog form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-0-Tiger-Snake-Monkey-Dog-Horse-Rooster-Dragon",
+    "eyebrow": "Trine Builder",
+    "prompt": "Tiger",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Snake",
+        "label": "Snake"
+      },
+      {
+        "id": "Monkey",
+        "label": "Monkey"
+      },
+      {
+        "id": "Dog",
+        "label": "Dog"
+      },
+      {
+        "id": "Horse",
+        "label": "Horse"
+      },
+      {
+        "id": "Rooster",
+        "label": "Rooster"
+      },
+      {
+        "id": "Dragon",
+        "label": "Dragon"
+      }
+    ],
+    "correctOptionId": "Dog|Horse",
+    "explanation": "Tiger / Horse / Dog form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-2-Ox-Tiger-Snake-Monkey-Goat-Rooster-Dog",
+    "eyebrow": "Trine Builder",
+    "prompt": "Ox",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Tiger",
+        "label": "Tiger"
+      },
+      {
+        "id": "Snake",
+        "label": "Snake"
+      },
+      {
+        "id": "Monkey",
+        "label": "Monkey"
+      },
+      {
+        "id": "Goat",
+        "label": "Goat"
+      },
+      {
+        "id": "Rooster",
+        "label": "Rooster"
+      },
+      {
+        "id": "Dog",
+        "label": "Dog"
+      }
+    ],
+    "correctOptionId": "Rooster|Snake",
+    "explanation": "Ox / Snake / Rooster form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-3-Snake-Rooster-Ox-Goat-Tiger-Cat-Horse",
+    "eyebrow": "Trine Builder",
+    "prompt": "Snake",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Rooster",
+        "label": "Rooster"
+      },
+      {
+        "id": "Ox",
+        "label": "Ox"
+      },
+      {
+        "id": "Goat",
+        "label": "Goat"
+      },
+      {
+        "id": "Tiger",
+        "label": "Tiger"
+      },
+      {
+        "id": "Cat",
+        "label": "Cat"
+      },
+      {
+        "id": "Horse",
+        "label": "Horse"
+      }
+    ],
+    "correctOptionId": "Ox|Rooster",
+    "explanation": "Ox / Snake / Rooster form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-4-Goat-Horse-Rat-Cat-Dragon-Pig-Monkey",
+    "eyebrow": "Trine Builder",
+    "prompt": "Goat",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Horse",
+        "label": "Horse"
+      },
+      {
+        "id": "Rat",
+        "label": "Rat"
+      },
+      {
+        "id": "Cat",
+        "label": "Cat"
+      },
+      {
+        "id": "Dragon",
+        "label": "Dragon"
+      },
+      {
+        "id": "Pig",
+        "label": "Pig"
+      },
+      {
+        "id": "Monkey",
+        "label": "Monkey"
+      }
+    ],
+    "correctOptionId": "Cat|Pig",
+    "explanation": "Cat / Goat / Pig form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-5-Pig-Cat-Rooster-Tiger-Snake-Goat-Dog",
+    "eyebrow": "Trine Builder",
+    "prompt": "Pig",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Cat",
+        "label": "Cat"
+      },
+      {
+        "id": "Rooster",
+        "label": "Rooster"
+      },
+      {
+        "id": "Tiger",
+        "label": "Tiger"
+      },
+      {
+        "id": "Snake",
+        "label": "Snake"
+      },
+      {
+        "id": "Goat",
+        "label": "Goat"
+      },
+      {
+        "id": "Dog",
+        "label": "Dog"
+      }
+    ],
+    "correctOptionId": "Cat|Goat",
+    "explanation": "Cat / Goat / Pig form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-6-Cat-Goat-Monkey-Horse-Tiger-Rooster-Pig",
+    "eyebrow": "Trine Builder",
+    "prompt": "Cat",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Goat",
+        "label": "Goat"
+      },
+      {
+        "id": "Monkey",
+        "label": "Monkey"
+      },
+      {
+        "id": "Horse",
+        "label": "Horse"
+      },
+      {
+        "id": "Tiger",
+        "label": "Tiger"
+      },
+      {
+        "id": "Rooster",
+        "label": "Rooster"
+      },
+      {
+        "id": "Pig",
+        "label": "Pig"
+      }
+    ],
+    "correctOptionId": "Goat|Pig",
+    "explanation": "Cat / Goat / Pig form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-7-Monkey-Rat-Dragon-Goat-Ox-Horse-Rooster",
+    "eyebrow": "Trine Builder",
+    "prompt": "Monkey",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Rat",
+        "label": "Rat"
+      },
+      {
+        "id": "Dragon",
+        "label": "Dragon"
+      },
+      {
+        "id": "Goat",
+        "label": "Goat"
+      },
+      {
+        "id": "Ox",
+        "label": "Ox"
+      },
+      {
+        "id": "Horse",
+        "label": "Horse"
+      },
+      {
+        "id": "Rooster",
+        "label": "Rooster"
+      }
+    ],
+    "correctOptionId": "Dragon|Rat",
+    "explanation": "Rat / Dragon / Monkey form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-8-Dog-Horse-Ox-Goat-Tiger-Rat-Snake",
+    "eyebrow": "Trine Builder",
+    "prompt": "Dog",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Horse",
+        "label": "Horse"
+      },
+      {
+        "id": "Ox",
+        "label": "Ox"
+      },
+      {
+        "id": "Goat",
+        "label": "Goat"
+      },
+      {
+        "id": "Tiger",
+        "label": "Tiger"
+      },
+      {
+        "id": "Rat",
+        "label": "Rat"
+      },
+      {
+        "id": "Snake",
+        "label": "Snake"
+      }
+    ],
+    "correctOptionId": "Horse|Tiger",
+    "explanation": "Tiger / Horse / Dog form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-9-Rooster-Tiger-Ox-Rat-Goat-Cat-Snake",
+    "eyebrow": "Trine Builder",
+    "prompt": "Rooster",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Tiger",
+        "label": "Tiger"
+      },
+      {
+        "id": "Ox",
+        "label": "Ox"
+      },
+      {
+        "id": "Rat",
+        "label": "Rat"
+      },
+      {
+        "id": "Goat",
+        "label": "Goat"
+      },
+      {
+        "id": "Cat",
+        "label": "Cat"
+      },
+      {
+        "id": "Snake",
+        "label": "Snake"
+      }
+    ],
+    "correctOptionId": "Ox|Snake",
+    "explanation": "Ox / Snake / Rooster form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-10-Rat-Monkey-Horse-Dog-Snake-Dragon-Ox",
+    "eyebrow": "Trine Builder",
+    "prompt": "Rat",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Monkey",
+        "label": "Monkey"
+      },
+      {
+        "id": "Horse",
+        "label": "Horse"
+      },
+      {
+        "id": "Dog",
+        "label": "Dog"
+      },
+      {
+        "id": "Snake",
+        "label": "Snake"
+      },
+      {
+        "id": "Dragon",
+        "label": "Dragon"
+      },
+      {
+        "id": "Ox",
+        "label": "Ox"
+      }
+    ],
+    "correctOptionId": "Dragon|Monkey",
+    "explanation": "Rat / Dragon / Monkey form a friendly Eastern zodiac trine."
+  },
+  {
+    "id": "trine-builder-11-Dragon-Ox-Horse-Rat-Monkey-Dog-Goat",
+    "eyebrow": "Trine Builder",
+    "prompt": "Dragon",
+    "detail": "Choose the two animals that complete this friendly trine.",
+    "options": [
+      {
+        "id": "Ox",
+        "label": "Ox"
+      },
+      {
+        "id": "Horse",
+        "label": "Horse"
+      },
+      {
+        "id": "Rat",
+        "label": "Rat"
+      },
+      {
+        "id": "Monkey",
+        "label": "Monkey"
+      },
+      {
+        "id": "Dog",
+        "label": "Dog"
+      },
+      {
+        "id": "Goat",
+        "label": "Goat"
+      }
+    ],
+    "correctOptionId": "Monkey|Rat",
+    "explanation": "Rat / Dragon / Monkey form a friendly Eastern zodiac trine."
+  }
+]

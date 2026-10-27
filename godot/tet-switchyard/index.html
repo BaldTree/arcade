@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Tet Switchyard · Station blockout</title>
+
+<link rel="stylesheet" href="style.css"></head><body>
+<main>
+<header><a href="../../" target="_top">← CUE Games</a><div><h1>Tet Switchyard</h1><p>STATION BLOCKOUT · GODOT 2D</p></div><button id="pause" disabled>Pause</button></header>
+<section class="station" aria-label="Station geometry preview">
+<div class="stage">
+<canvas id="canvas" width="1280" height="800" tabindex="-1" aria-label="Four railway platforms with entry bridge on the right and return bridge on the left. Tap or click a train to route the customer speaking at the turnstile.">Your browser needs WebGL 2 to display the station.</canvas>
+<button class="train-choice" data-platform="0" data-copy="0" aria-label="Train 1: Rat, Dragon, Monkey" aria-keyshortcuts="1" disabled hidden><span class="sr-only">Train 1: Rat, Dragon, Monkey</span></button>
+<button class="train-choice" data-platform="0" data-copy="1" aria-label="Train 1: Rat, Dragon, Monkey" aria-keyshortcuts="1" disabled hidden><span class="sr-only">Train 1: Rat, Dragon, Monkey</span></button>
+<button class="train-choice" data-platform="1" data-copy="0" aria-label="Train 2: Ox, Snake, Rooster" aria-keyshortcuts="2" disabled hidden><span class="sr-only">Train 2: Ox, Snake, Rooster</span></button>
+<button class="train-choice" data-platform="1" data-copy="1" aria-label="Train 2: Ox, Snake, Rooster" aria-keyshortcuts="2" disabled hidden><span class="sr-only">Train 2: Ox, Snake, Rooster</span></button>
+<button class="train-choice" data-platform="2" data-copy="0" aria-label="Train 3: Tiger, Horse, Dog" aria-keyshortcuts="3" disabled hidden><span class="sr-only">Train 3: Tiger, Horse, Dog</span></button>
+<button class="train-choice" data-platform="2" data-copy="1" aria-label="Train 3: Tiger, Horse, Dog" aria-keyshortcuts="3" disabled hidden><span class="sr-only">Train 3: Tiger, Horse, Dog</span></button>
+<button class="train-choice" data-platform="3" data-copy="0" aria-label="Train 4: Cat, Goat, Pig" aria-keyshortcuts="4" disabled hidden><span class="sr-only">Train 4: Cat, Goat, Pig</span></button>
+<button class="train-choice" data-platform="3" data-copy="1" aria-label="Train 4: Cat, Goat, Pig" aria-keyshortcuts="4" disabled hidden><span class="sr-only">Train 4: Cat, Goat, Pig</span></button>
+<div id="speech" class="speech" hidden role="status" aria-live="polite" aria-atomic="true"><span id="ticket-number" class="eyebrow">CUSTOMER AT TURNSTILE</span><p>My birthday is <strong id="birthday">…</strong></p><small>Tết reference: <b id="tet">—</b></small></div>
+<div id="cover"><div><span class="eyebrow">CUE GAMES / SCENE STUDY</span><h2 id="cover-title">Opening the station</h2><p id="cover-copy">Loading the Godot scene…</p><progress id="progress"></progress><button id="continue" hidden>Continue</button></div></div>
+</div>
+<div class="scene-key"><span>TAP A TRAIN TO SEND THE CUSTOMER · KEYS 1–4</span><span>GEOMETRY STUDY / ART TO FOLLOW</span></div>
+</section>
+<section class="status" aria-label="Station status"><span id="queue">Waiting: 0 / 18</span><span id="boarded">Boarded: 0</span><span id="departed">Departures: 0</span><span id="arrival">Arrivals stopped</span></section>
+<p id="event" role="status" aria-live="polite">Preview only. No profile changes or rewards.</p>
+<details class="review" open><summary>Scene review controls</summary><div class="review-controls"><button id="study" disabled>New layout study</button><button id="shift" disabled>Start timed shift</button><button id="fixture" disabled>Train turnover demo</button><button id="add" disabled>Add customer</button><label><input type="checkbox" id="routes"> Show paths</label><label><input type="checkbox" id="reduced"> Reduce decorative motion</label></div><p>Layout study stops new arrivals. The turnover demo starts with 8 seated passengers and 3 waiting on platform 3. Outlined queue places represent passengers still elsewhere in the station. Dates use verified coverage from 27 Jan 1952 through 2025. Keyboard: 1–4 route, Escape pauses. Sound and finished artwork are subsequent work.</p></details>
+</main>
+<script src="host.js"></script><script src="index.js"></script><script>
+const engine = new Engine({"args":[],"canvasResizePolicy":0,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"../runtime/fce12c0d8f9e5df6/godot","experimentalVK":false,"fileSizes":{"index.pck":28580,"../runtime/fce12c0d8f9e5df6/godot.wasm":39514754},"focusCanvas":false,"gdextensionLibs":[],"godotPoolSize":4,"mainPack":"index.pck"});
+engine.startGame({canvas:document.getElementById('canvas'),canvasResizePolicy:0,onProgress:(loaded,total)=>{const p=document.getElementById('progress');if(total){p.max=total;p.value=loaded;}}}).catch(error=>window.TetStation.fail(error));
+</script></body></html>
+
